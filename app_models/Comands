@@ -1,14 +1,18 @@
+#  1. Создание пользователей
 user_1 = User.objects.create_user('user_1')
 user_2 = User.objects.create_user('user_2')
 
+#  2. Создание авторов
 author_1 = Author.objects.create(user = user_1)
 author_2 = Author.objects.create(user = user_2)
 
+#  3. Создание категорий
 cat_business = Category.objects.create(name = "business")
 cat_politics = Category.objects.create(name = "politics")
 cat_science = Category.objects.create(name = "science")
 cat_entertainment = Category.objects.create(name = "entertainment")
 
+#  4. Создание постов
 article_1 = Post.objects.create(author = author_1,
                                 type = Post.article,
                                 name = "The World’s Biggest Clown Purchases the World’s Largest Circus",
@@ -35,11 +39,13 @@ news_1 = Post.objects.create(author = author_1,
                                        "shot by Smithee this year.\nLike the previous parts, the movie was based on "\
                                        "the series written by Cordwainer Bird.")
 
+#  5. Присвоение постам категорий
 PostCategory.objects.create(post = article_1, category = cat_business)
 PostCategory.objects.create(post = article_2, category = cat_politics)
 PostCategory.objects.create(post = article_2, category = cat_science)
 PostCategory.objects.create(post = news_1, category = cat_entertainment)
 
+#  6. Создание комментариев
 comment_1 = Comment.objects.create(post = article_1,
                        user = user_2,
                        text = "Unless twi stops silencing millions of users and promoting woke agenda, there will be "\
@@ -54,6 +60,7 @@ comment_4 = Comment.objects.create(post = news_1,
                        user = user_2,
                        text = "Who the hell is that Smithee?")
 
+#  7. Коррекция рейтингов
 Post.like(article_1)
 Post.dislike(article_2)
 Post.like(news_1)
@@ -65,13 +72,16 @@ Comment.like(comment_3)
 Comment.like(comment_3)
 Comment.like(comment_4)
 
+#  8. Обновление рейтингов
 Author.update_rating(author_1)
 Author.update_rating(author_2)
 
+#  9. Пользователь с наивысшим рейтингом
 best_author = Author.objects.all().order_by('-user_rating')[0]
 best_author.user.username
 best_author.user_rating
 
+#  10. Статья с наивысшим рейтингом
 best_post = Post.objects.all().order_by('-rating')[0]
 print(best_post.date)
 best_post.author.user.username
@@ -79,4 +89,5 @@ best_post.rating
 best_post.name
 Post.preview(best_post)
 
+#  11. Комментарии к статье с наивысшим рейтингом
 Comment.objects.filter(post=best_post).values('date','user','rating','text')
